@@ -10,7 +10,7 @@ Dependencies
 * Entity's [eveapi](https://github.com/ntt/eveapi) (Included as submodule)
 * zkb.py (included until broken out... then submodule)
 * mySQL instance
-* [EVE Data Dump (SDE)](https://www.fuzzwork.co.uk/dump/)
+* [EVE Data Dump (SDE)](https://www.fuzzwork.co.uk/dump/) strongly recommended
 
 How To Use ColdCall
 -------------------
