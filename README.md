@@ -27,7 +27,7 @@ Feel free to adjust main() to suit your queries.  Setup should be pretty flexibl
 
 License Info
 ------------
-This tool is wholly reliant on [zKillboard](https://zkillboard.com).  As such, it serves to remind users of [zkb's T.O.S. agreement](https://zkillboard.com/information/tos/).  zKillboard is a resource created by players, for players.  ColdCall has been created for enabling people to better utilize zKillboard data in their recruiting process.  
+This tool is wholly reliant on [zKillboard](https://zkillboard.com).  As such, it serves to remind users of [zkb's T.O.S. agreement](https://zkillboard.com/information/tos/).  zKillboard is a resource created by players, for players.  ColdCall has been created to enable people to better utilize zKillboard data, specifically as a tool to track grouping trends.  
 
 ColdCall is openly shared to comply with zKB's "...datamining, in an attempt to gain an unfair advantage over corporations and/or alliances, is not allowed" rules.  Always remember @wilw's rule: Don't be a dick.
 
