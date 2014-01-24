@@ -3,6 +3,8 @@ ColdCall
 
 A recruitment tool to scrape [zKillboard](https://zkillboard.com) using EVE Online pilot statistics.
 
+ColdCall has been designed specifically for [Aideron Robotics](https://aideronrobotics.com) needs.  It has been shared here as a framework for forking new and exciting filters in the future.
+
 Dependencies
 ------------
 * [Python 2.7.x](http://www.python.org/getit/)
