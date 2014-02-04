@@ -327,10 +327,10 @@ def main():
 
 	if full_scrape == 1:
 
-		query_AR = zkb.Query(query_start_str)
+		query_AR = zkb.Query(str(query_start_str))
 		query_AR.factionID(500004)	#gallente Faction
 		query_AR.api_only
-		query_AR.beforeKillID(zkb.fetchLatestKillID(query_start_str))	#preload latest killID
+		query_AR.beforeKillID(zkb.fetchLatestKillID(str(query_start_str)))	#preload latest killID
 		
 		print "Fetching data from %s" % query_AR
 		kills_obj = load_SQL(query_AR)
