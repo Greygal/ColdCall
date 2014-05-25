@@ -330,7 +330,8 @@ def main():
 		query_AR = zkb.Query(str(query_start_str))
 		query_AR.factionID(500004)	#gallente Faction
 		query_AR.api_only
-		query_AR.beforeKillID(zkb.fetchLatestKillID(str(query_start_str)))	#preload latest killID
+		latestID = int(zkb.fetchLatestKillID(str(query_start_str)))
+		query_AR.beforeKillID(latestID)	#preload latest killID
 		
 		print "Fetching data from %s" % query_AR
 		kills_obj = load_SQL(query_AR)

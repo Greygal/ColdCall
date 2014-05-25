@@ -279,7 +279,7 @@ class Query(object):
 				_dump_results(self,query_results_JSON)	#major failure, dump for restart
 				sys.exit(3)
 			
-			beforeKill = earliestKillID(single_query_JSON)
+			beforeKill = int(earliestKillID(single_query_JSON))
 			
 			if len(single_query_JSON) == 0:
 				query_complete = True
@@ -384,22 +384,25 @@ def fetchResult(zkb_url):
 		time.sleep(default_sleep*tries)	#wait in case of retry
 		
 		try:
-			opener = urllib2.build_opener()
-			http_header = urllib2.urlopen(request).headers
+			opener = urllib2.build_opener()	
 			raw_zip = opener.open(request)
+			http_header = raw_zip.headers
 			dump_zip_stream = raw_zip.read()
+			print http_header
 		except urllib2.HTTPError as e:
 			#log_filehandle.write("%s: %s\n" % (time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()), e))
 			print "retry %s: %s" %(zkb_url,tries+1)
+			print raw_zip.headers
 			continue
 		except urllib2.URLError as er:
 			#log_filehandle.write("%s: %s\n" % (time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()), er))
 			print "URLError.  Retry %s: %s" %(zkb_url,tries+1)
+			print raw_zip.headers
 			continue
 		except socket.error as err:
 			#log_filehandle.write("%s: %s\n" % (time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()), err))
 			print "Socket Error.  Retry %s: %s" %(zkb_url,tries+1)
-		
+
 		try:
 			conn_allowance = int(http_header["X-Bin-Attempts-Allowed"])
 			conn_reqs_used = int(http_header["X-Bin-Requests"])	
