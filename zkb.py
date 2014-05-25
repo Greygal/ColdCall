@@ -390,7 +390,8 @@ def fetchResult(zkb_url):
 			raw_zip = opener.open(request)
 			http_header = raw_zip.headers
 			dump_zip_stream = raw_zip.read()
-			print http_header
+			#print http_header
+			#print sleepTime
 		except urllib2.HTTPError as e:
 			#log_filehandle.write("%s: %s\n" % (time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()), e))
 			print "retry %s: %s" %(zkb_url,tries+1)
