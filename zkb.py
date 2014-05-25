@@ -39,7 +39,10 @@ valid_modifiers = (
 	"xml")
 
 gzip_override=0
-	
+
+snooze_routine = conf.get("ZKB","snooze_routine")
+query_mod = float(conf.get("ZKB","query_mod"))
+
 class QueryException(Exception):
 	def __init__ (self,code):
 		self.code = code
@@ -379,7 +382,6 @@ def fetchResult(zkb_url):
 	#log query
 	
 	for tries in range (0,retry_limit):
-		snooze_routine = 0
 		time.sleep(sleepTime)			#default wait between queries
 		time.sleep(default_sleep*tries)	#wait in case of retry
 		
@@ -402,24 +404,11 @@ def fetchResult(zkb_url):
 		except socket.error as err:
 			#log_filehandle.write("%s: %s\n" % (time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()), err))
 			print "Socket Error.  Retry %s: %s" %(zkb_url,tries+1)
-
-		try:
-			conn_allowance = int(http_header["X-Bin-Attempts-Allowed"])
-			conn_reqs_used = int(http_header["X-Bin-Requests"])	
-			conn_sleep_time= int(header["X-Bin-Seconds-Between-Request"])
-		except KeyError as E:
-			snooze_routine +=1
-			try:
-				query_limit  = int(http_header["X-Bin-Max-Requests"])
-				request_used = int(http_header["X-Bin-Request-Count"])
-			except KeyError as EE:
-				snooze_routine +=1
 		
-		#adjust sleep time
-		if snooze_routine == 0:
-			_politeSnooze(http_header)
-		elif snooze_routine == 1:
-			_snooze(http_header)
+		if snooze_routine == "HOURLY":
+			sleepTime = _hourlySnooze(http_header)
+		elif snooze_routine == "POLITE":
+			sleepTime = _politeSnooze(http_header)
 		else:
 			sleepTime = default_sleep
 			
@@ -503,6 +492,31 @@ def _politeSnooze(http_header):
 	if (conn_reqs_used+1)==conn_allowance:
 		time.sleep(conn_sleep_time)
 
+def _hourlySnooze(http_header):
+	#Designed to work with queries/hour rules
+	snooze = default_sleep
+	progress = 0
+	try:
+		allowance = int(http_header["X-Bin-Max-Requests"])
+		
+	except KeyError as e:
+		print "WARNING: X-Bin-Max-Requests not defined in header"
+		return default_sleep
+	try:
+		progress = int(http_header["X-Bin-Request-Count"])
+	except KeyError as e:
+		print "WARNING: X-Bin-Request-Count not defined in header"
+	
+	snooze = (3600 / allowance) * query_mod
+	
+	if (progress/allowance) > 0.65:
+		snooze * 1.1
+	elif (progress/allowance) > 0.80:
+		snooze * 1.5
+	elif (progress/allowance) > 0.90:
+		snooze * 2
+		
+	return snooze
 def _dump_results(queryObj,results_json):
 	dump_obj = []
 	dump_obj.append(str(queryObj))
